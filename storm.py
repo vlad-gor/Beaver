@@ -4,6 +4,9 @@ import time, random
 import ev3dev.ev3 as ev3
 from ev3dev2.motor import LargeMotor, SpeedRPM, SpeedPercent, OUTPUT_B, OUTPUT_C, MoveSteering
 from ev3dev2.sound import Sound
+from ev3dev2.sensor import INPUT_1
+from ev3dev2.sensor.lego import TouchSensor
+from ev3dev2.led import Leds
 
 
 class EV3rstorm:
@@ -14,6 +17,8 @@ class EV3rstorm:
 
         self.screen = ev3.Screen()
         self.sound = Sound()
+        self.ts = TouchSensor()
+        self.leds = Leds()
         
         self.lm = LargeMotor(OUTPUT_B)
         self.rm = LargeMotor(OUTPUT_C)
@@ -26,6 +31,17 @@ class EV3rstorm:
         '''Движение вперед'''
         self.steer_pair.on_for_rotations(
             0, SpeedPercent(spc), n)
+
+    def switch_leds(self):
+        print("Press the touch sensor to change the LED color!")
+
+        while True:
+            if self.ts.is_pressed:
+                self.leds.set_color("LEFT", "GREEN")
+                self.leds.set_color("RIGHT", "GREEN")
+            else:
+                self.leds.set_color("LEFT", "RED")
+                self.leds.set_color("RIGHT", "RED")
 
     def draw_face(self):
         '''Нарисовать глаза на экране'''
@@ -49,4 +65,5 @@ class EV3rstorm:
 
 if __name__ == '__main__':
     Beaver = EV3rstorm()
-    Beaver.move_forward(50, 10)
+    # Beaver.move_forward(50, 10)
+    Beaver.switch_leds()
