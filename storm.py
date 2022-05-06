@@ -10,7 +10,7 @@ class EV3rstorm:
 
     def __init__(self):
         '''Подготовить все устройства'''
-        print('Инициализация робота ...')
+        print('Init robot ...')
 
         self.screen = ev3.Screen()
         self.sound = Sound()
