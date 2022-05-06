@@ -5,20 +5,30 @@ import ev3dev.ev3 as ev3
 from ev3dev2.motor import LargeMotor, SpeedRPM, SpeedPercent, OUTPUT_B, OUTPUT_C, MoveSteering
 from ev3dev2.sound import Sound
 
-sound = Sound()
-m1 = LargeMotor(OUTPUT_B)
-m2 = LargeMotor(OUTPUT_C)
-steer_pair = MoveSteering(OUTPUT_B, OUTPUT_C)
 
-class ev3rstorm:
+class EV3rstorm:
 
     def __init__(self):
+        '''Подготовить все устройства'''
+        print('Инициализация робота ...')
+
         self.screen = ev3.Screen()
+        self.sound = Sound()
+        
+        self.lm = LargeMotor(OUTPUT_B)
+        self.rm = LargeMotor(OUTPUT_C)
+        self.steer_pair = MoveSteering(OUTPUT_B, OUTPUT_C)
+
         self.draw_face()
-        sound.speak('Hello!')
-        time.sleep(5)
+        self.sound.speak('Hello!')
+
+    def move_forward(self, spc, n):
+        '''Движение вперед'''
+        self.steer_pair.on_for_rotations(
+            0, SpeedPercent(spc), n)
 
     def draw_face(self):
+        '''Нарисовать глаза на экране'''
         w,h = self.screen.shape
         y = h // 2
 
@@ -38,4 +48,5 @@ class ev3rstorm:
         self.screen.update()
 
 if __name__ == '__main__':
-    Beaver = ev3rstorm()
+    Beaver = EV3rstorm()
+    Beaver.move_forward(50, 10)
